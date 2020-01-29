@@ -1,0 +1,85 @@
+﻿@page "/counter"
+@using SistemaFarmacia.Entidades;
+@using DAL;
+@using BLL;
+
+<h1>Counter</h1>
+
+
+
+
+<EditForm Model="@usuario" OnValidSubmit="@Guardar">
+
+    <div class="form-group">
+        <label for="NombresText">Nombres</label>
+        <InputText @bind-Value="usuario.Nombres"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="EmailText">Email</label>
+        <InputText @bind-Value="usuario.Email"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="UsuarioText">Usuario</label>
+        <InputText @bind-Value="usuario.Usuario"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="ClaveText">Clave</label>
+        <InputText @bind-Value="usuario.Clave"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="FechaIngresoTime">FechaIngreso</label>
+        <InputDate @bind-Value="usuario.FechaIngreso"></InputDate>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+
+</EditForm>
+
+
+
+
+
+@code {
+    Usuarios usuario = new Usuarios();
+    private int currentCount = 0;
+
+    private void Limpiar()
+    {
+        usuario = new Usuarios();
+        usuario.FechaIngreso = DateTime.Now;
+
+    }
+
+
+
+    private void Guardar()
+    {
+
+        RepositorioBase<Usuarios> db = new RepositorioBase<Usuarios>();
+        try
+        {
+            if(usuario.UsuarioId == 0)
+            {
+                if (db.Guardar(usuario))
+                {
+                    Limpiar();
+                }
+            }
+            else
+            {
+                if(db.Modificar(usuario))
+                {
+                    Limpiar();
+                }
+            }
+
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+
+    }
+}
